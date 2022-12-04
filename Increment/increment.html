@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        HTML page I created for my WebAssembly module.
+
+        <script>
+            function isWebAssemblySupported() {
+                try {
+                    if (typeof WebAssembly === "object") {
+                        const module = new WebAssembly.Module(new Uint8Array([0x00, 0x61, 0x73, 0x6D, 0x01, 0x00, 0x00, 0x00]));
+                        if (module instanceof WebAssembly.Module) {
+                            const moduleInstance = new WebAssembly.Instance(module);
+                            return (moduleInstance instanceof WebAssembly.Instance);
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+
+                return false;
+            }
+
+            const webAssemblySupported = isWebAssemblySupported();
+            console.log((webAssemblySupported ? "WebAssembly is supported" : "WebAssembly is not supported"));
+
+            if (webAssemblySupported) {
+                const importObject = {
+                    env: {
+                        __memory_base: 0,
+                    }
+                };
+
+                WebAssembly.instantiateStreaming(fetch("increment.wasm"), importObject)
+                    .then(result => {
+                        const originalValue = 17;
+                        console.log(`Original Value: ${originalValue}`);
+                        console.log(`Called increment function on it: ${result.instance.exports.increment(17)}`);
+                        console.log(`Called decrement function on it: ${result.instance.exports.decrement(17)}`);
+                    });
+            }
+        </script>
+    </body>
+</html>
