@@ -37,8 +37,8 @@
                     .then(result => {
                         const originalValue = 17;
                         console.log(`Original Value: ${originalValue}`);
-                        console.log(`Called increment function on it: ${result.instance.exports.increment(17)}`);
-                        console.log(`Called decrement function on it: ${result.instance.exports.decrement(17)}`);
+                        console.log(`Called increment function on it: ${result.instance.exports.increment(originalValue)}`);
+                        console.log(`Called decrement function on it: ${result.instance.exports.decrement(originalValue)}`);
                     });
             }
         </script>
